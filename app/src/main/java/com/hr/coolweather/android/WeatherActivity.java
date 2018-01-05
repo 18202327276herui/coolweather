@@ -1,6 +1,7 @@
 package com.hr.coolweather.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.hr.coolweather.android.gson.Forecast;
 import com.hr.coolweather.android.gson.Weather;
+import com.hr.coolweather.android.service.AutoUpdateService;
 import com.hr.coolweather.android.util.HttpUtil;
 import com.hr.coolweather.android.util.Utility;
 
@@ -213,6 +215,12 @@ public class WeatherActivity extends Activity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        if (weather != null && "ok".equals(weather.status)) {
+            Intent intent = new Intent(this, AutoUpdateService.class);
+            startService(intent);
+        } else {
+            Toast.makeText(WeatherActivity.this, getString(R.string.get_weather_info_failure), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.nav_button)
